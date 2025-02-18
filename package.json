@@ -1,0 +1,29 @@
+{
+  "name": "agenda-electron",
+  "version": "1.0.0",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": "",
+  "devDependencies": {
+    "electron": "^34.2.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongodb": "^6.13.0",
+    "mongoose": "^8.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThalisVN/agenda-electron.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ThalisVN/agenda-electron/issues"
+  },
+  "homepage": "https://github.com/ThalisVN/agenda-electron#readme"
+}
