@@ -1,0 +1,84 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.calendar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 5px 10px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.calendar, #days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    max-width: 600px;
+    margin: auto;
+}
+
+.day {
+    font-weight: bold;
+    padding: 10px;
+    background: #ddd;
+}
+
+.date {
+    padding: 20px;
+    border: 1px solid #aaa;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.date.empty {
+    visibility: hidden;
+    pointer-events: none;
+    background-color: transparent;
+    border: none;
+}
+
+.appointment-badge {
+    background-color: #2196f3;
+    color: white;
+    font-size: 0.7em;
+    padding: 2px 5%;
+    border-radius: 3px;
+    margin: 2px;
+}
+
+.date:hover {
+    background: #ccc;
+}
+
+.today {
+    background: #ffeb3b;
+}
+
+li {
+    margin: 5px 0;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+button.edit, button.delete {
+    padding: 2px 5px;
+    cursor: pointer;
+}
+
+    #hora {
+        margin-left: 10px;
+        padding: 5px;
+    }
+    #salvar {
+        margin-left: 15px;
+    }
