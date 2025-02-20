@@ -10,27 +10,31 @@ async function updateCalendar() {
   const lastDay = new Date(year, month + 1, 0);
   const today = new Date();
 
-  monthYearElement.textContent = 
+// --- Atualizar o cabeçalho do mês ---
+
+monthYearElement.textContent = 
     `${currentDate.toLocaleString('pt-BR', { month: 'long' })} ${year}`;
 
+    // --- Adicionar os dias vazios ---
   for(let i = 0; i < firstDay.getDay(); i++) {
     daysContainer.innerHTML += '<div class="date empty"></div>';
   }
 
+  // --- Adicionar os dias do mês ---
   for(let day = 1; day <= lastDay.getDate(); day++) {
     const dateElement = document.createElement('div');
     dateElement.className = 'date';
     dateElement.textContent = day;
 
+  // --- Adicionar a classe 'today' ao dia atual ---
     if(day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
       dateElement.classList.add('today');
     }
-
+    // --- Adicionar o evento de clique ---
     dateElement.addEventListener('click', () => {
       const selectedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
       window.electronAPI.navigateTo(selectedDate); // Usando window.electronAPI
     });
-
     daysContainer.appendChild(dateElement);
   }
 
@@ -71,35 +75,4 @@ document.getElementById('nextMonth').addEventListener('click', () => {
 
 window.electronAPI.refreshCalendar(updateCalendar); // Usando window.electronAPI
 
-updateCalendar();/**
- * Arquivo de script do renderer process.
- * Responsável por interagir com o usuário e chamar funções do Electron.
- */
-
-/**
- * Função para salvar um novo compromisso.
- */
-const salvarCompromisso = () => {
-  const titulo = tituloInput.value.trim();
-  const hora = horaInput.value.trim();
-
-  if (!titulo || !hora) {
-    alert("Preencha todos os campos!");
-    return;
-  }
-
-  // Chama a função do Electron para salvar o compromisso.
-  window.electronAPI.salvarCompromisso({ titulo, hora });
-};
-
-/**
- * Função para buscar compromissos para o dia atual.
- */
-const buscarCompromissos = () => {
-  // Chama a função do Electron para buscar compromissos.
-  window.electronAPI.buscarCompromissos();
-};
-
-// Adiciona eventos aos botões.
-btnSalvar.addEventListener("click", salvarCompromisso);
-btnBuscar.addEventListener("click", buscarCompromissos);
+updateCalendar();

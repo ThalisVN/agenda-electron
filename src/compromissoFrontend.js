@@ -3,49 +3,48 @@ document.addEventListener('DOMContentLoaded', async () => {
   const date = params.get('date');
   document.getElementById('dataSelecionada').textContent = date;
 
-  // --- Variável global para armazenar compromissos ---
   let appointments = [];
 
-  // --- Função para recarregar a lista dinamicamente ---
+  // Função para recarregar a lista de compromissos
   const loadAppointments = async () => {
-    appointments = await window.electronAPI.getAppointments(date); // Atualiza a lista
+    appointments = await window.electronAPI.getAppointments(date);
     const list = document.getElementById('lista-compromissos');
     list.innerHTML = '';
 
     appointments.forEach(app => {
       const li = document.createElement('li');
+      // Converta explicitamente para string e adicione logs:
+      const idString = app._id.toString(); 
+      console.log('ID no Frontend:', idString); // Debug
       li.innerHTML = `
         <span>${app.time} - ${app.name}</span>
-        <button class="edit" data-id="${app._id}">✏️</button>
-        <button class="delete" data-id="${app._id}">❌</button>
+        <button class="edit" data-id="${idString}">✏️</button>
+        <button class="delete" data-id="${idString}">❌</button>
       `;
       list.appendChild(li);
     });
-  };
+  };  
 
-  // --- Carregar compromissos inicialmente ---
   await loadAppointments();
 
-  // --- Evento de clique (delegação para elementos dinâmicos) ---
+  // Evento de clique (delegação para elementos dinâmicos)
   document.getElementById('lista-compromissos').addEventListener('click', async (e) => {
-    // Excluir Compromisso
     if (e.target.classList.contains('delete')) {
       const id = e.target.dataset.id;
       await window.electronAPI.deleteAppointment(id);
       await loadAppointments(); // Recarrega a lista após exclusão
     }
-    
-    // Editar Compromisso
+
     if (e.target.classList.contains('edit')) {
       const id = e.target.dataset.id;
       const app = appointments.find(a => a._id === id);
       document.getElementById('compromisso').value = app.name;
       document.getElementById('hora').value = app.time;
-      document.getElementById('salvar').dataset.id = id; // Armazena ID para edição
+      document.getElementById('salvar').dataset.id = id;
     }
-  });
+ });
 
-  // --- Salvar/Atualizar ---
+  // Salvar/Atualizar
   document.getElementById('salvar').addEventListener('click', async () => {
     const compromisso = {
       date,
@@ -60,6 +59,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       await window.electronAPI.saveAppointment(compromisso);
     }
     
-    window.close(); // Fecha a janela após salvar
+    window.close();
   });
 });
