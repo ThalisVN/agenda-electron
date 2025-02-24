@@ -40,7 +40,7 @@ monthYearElement.textContent =
 
   await loadAppointments();
 }
-
+// --- Função para carregar os compromissos ---
 async function loadAppointments() {
   document.querySelectorAll('.appointment-badge').forEach(badge => badge.remove());
   

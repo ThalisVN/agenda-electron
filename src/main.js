@@ -9,37 +9,40 @@ const DB_NAME = 'agenda';
 async function createWindow() {
   const client = await MongoClient.connect(DB_URL);
   const db = client.db(DB_NAME);
-
+ // --- Criar a janela ---
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
       contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js') // Caminho corrigido para preload.js
+      preload: path.join(__dirname, 'preload.js')
     }
   });
 
-  mainWindow.loadFile(path.join(__dirname, '../html/index.html')); 
+  mainWindow.loadFile(path.join(__dirname, '../html/index.html'));
 
-  // Handlers do Banco de Dados
+  // --- Handlers CRUD Atualizados ---
   ipcMain.handle('get-appointments', async (_, date) => {
-    return await db.collection('compromissos').find({ date }).toArray();
+    const appointments = await db.collection('compromissos').find({ date }).toArray();
+    // Converta _id para string antes de enviar para o frontend
+    return appointments.map(app => ({ ...app, _id: app._id.toString()}));
   });
-
+ // --- Salvar Compromisso ---
   ipcMain.handle('save-appointment', async (_, appointment) => {
     const result = await db.collection('compromissos').insertOne(appointment);
-    return { ...appointment, _id: result.insertedId };
+    return {
+      ...appointment,
+      _id: result.insertedId.toString() 
+    };
   });
-
+  // --- Deletar Compromisso ---
   ipcMain.handle('delete-appointment', async (_, id) => {
-    console.log('ID Recebido no Backend:', id, 'Tipo:', typeof id); // Debug
     if (!ObjectId.isValid(id)) {
-      console.error('Formato Inválido! ID deve ser 24 caracteres hexadecimais.');
       throw new Error('ID inválido!');
     }
     return await db.collection('compromissos').deleteOne({ _id: new ObjectId(id) });
   });
-
+  // --- Editar Compromisso ---
   ipcMain.handle('update-appointment', async (_, id, appointment) => {
     if (!ObjectId.isValid(id)) {
       throw new Error('ID inválido!');
@@ -50,7 +53,7 @@ async function createWindow() {
     );
     return appointment;
   });
-
+  
   // Janela de Compromissos
   ipcMain.on('open-appointment-window', (_, date) => {
     const appointmentWindow = new BrowserWindow({
@@ -62,9 +65,10 @@ async function createWindow() {
         preload: path.join(__dirname, 'preload.js') 
       }
     });
-    
+    // Passar a data para o HTML 
     appointmentWindow.loadURL(`file://${path.join(__dirname, '../html/compromisso.html')}?date=${date}`);
     
+    // Recarregar a lista ao fechar a janela
     appointmentWindow.on('closed', () => {
       mainWindow.webContents.send('refresh-calendar');
     });
