@@ -8,8 +8,14 @@
 </head>
 <body>
     <h2>Compromisso para <span id="dataSelecionada"></span></h2>
-    <input type="text" id="compromisso" placeholder="Descrição">
+    <input type="text" id="compromisso" placeholder="nome">
     <input type="time" id="hora" required>
+<select id="tipo">
+  <option value="prova">Prova</option>
+  <option value="aop">AOP</option>
+  <option value="aula-sincrona">Aula Síncrona</option>
+  <option value="agendamento-prova">Agendamento de Prova</option>
+</select>
     <button id="salvar">Salvar</button>
     <h3>Compromissos Agendados:</h3>
     <ul id="lista-compromissos"></ul>

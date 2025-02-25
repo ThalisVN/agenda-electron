@@ -22,19 +22,16 @@ async function createWindow() {
   mainWindow.loadFile(path.join(__dirname, '../html/index.html'));
 
   // --- Handlers CRUD Atualizados ---
-  ipcMain.handle('get-appointments', async (_, date) => {
-    const appointments = await db.collection('compromissos').find({ date }).toArray();
-    // Converta _id para string antes de enviar para o frontend
-    return appointments.map(app => ({ ...app, _id: app._id.toString()}));
+  ipcMain.handle('get-appointments', async (_, monthPrefix) => {
+    const query = { date: { $regex: `^${monthPrefix}` } };
+    const appointments = await db.collection('compromissos').find(query).toArray();
+    return appointments.map(app => ({ ...app, _id: app._id.toString() }));
   });
  // --- Salvar Compromisso ---
-  ipcMain.handle('save-appointment', async (_, appointment) => {
-    const result = await db.collection('compromissos').insertOne(appointment);
-    return {
-      ...appointment,
-      _id: result.insertedId.toString() 
-    };
-  });
+ ipcMain.handle('save-appointment', async (_, appointment) => {
+  const result = await db.collection('compromissos').insertOne(appointment);
+  return {...appointment,_id: result.insertedId.toString()};
+});
   // --- Deletar Compromisso ---
   ipcMain.handle('delete-appointment', async (_, id) => {
     if (!ObjectId.isValid(id)) {

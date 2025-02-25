@@ -39,6 +39,26 @@ button {
     cursor: pointer;
 }
 
+/* Cores dos dias */
+.date.prova { background-color: #ffcccc !important; }
+.date.aop { background-color: #ffd699 !important; }
+.date.aula-sincrona { background-color: #ffff99 !important; }
+.date.agendamento-prova { background-color: #ffb3ff !important; }
+
+/* Badges */
+.appointment-badge {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 2px;
+}
+.prova-badge { background: #ffcccc; }
+.aop-badge { background: #ffd699; }
+.aula-sincrona-badge { background: #ffff99; }
+.agendamento-prova-badge { background: #ffb3ff; }
+  
+
 .date.empty {
     visibility: hidden;
     pointer-events: none;
@@ -82,3 +102,4 @@ button.edit, button.delete {
     #salvar {
         margin-left: 15px;
     }
+

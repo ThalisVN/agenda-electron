@@ -46,7 +46,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const compromisso = {
       date,
       name: document.getElementById('compromisso').value,
-      time: document.getElementById('hora').value
+      time: document.getElementById('hora').value,
+      type: document.getElementById('tipo').value
     };
   
     // --- Editar Compromisso ---
