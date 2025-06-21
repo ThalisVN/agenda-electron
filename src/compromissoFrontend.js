@@ -45,11 +45,36 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('salvar').addEventListener('click', async () => {
     const compromisso = {
       date,
-      name: document.getElementById('compromisso').value,
-      time: document.getElementById('hora').value,
-      type: document.getElementById('tipo').value
+      name: document.getElementById('compromisso').value.trim(),
+      time: document.getElementById('hora').value.trim(),
+      type: document.getElementById('tipo').value.trim()
     };
-  
+
+    // --- Validação dos campos ---
+   const msg = document.getElementById('mensagemErro');
+msg.textContent = ''; // Limpar mensagens anteriores
+
+if (!compromisso.name) {
+  msg.textContent = 'Por favor, preencha o campo de compromisso.';
+  document.getElementById('compromisso').focus();
+  return;
+}
+
+if (!compromisso.time) {
+  msg.textContent = 'Por favor, preencha o campo de hora.';
+  document.getElementById('hora').focus();
+  return;
+}
+
+const existingAppointment = appointments.find(app =>
+  app.date === compromisso.date && app.time === compromisso.time && app._id !== document.getElementById('salvar').dataset.id
+);
+
+if (existingAppointment) {
+  msg.textContent = 'Já existe um compromisso agendado para essa data e hora.';
+  return;
+}
+
     // --- Editar Compromisso ---
     const id = document.getElementById('salvar').dataset.id;
     if (id) {
